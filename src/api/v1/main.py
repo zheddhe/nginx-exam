@@ -1,10 +1,7 @@
 import os
 import joblib
-import numpy as np
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'model.joblib')
 
@@ -22,6 +19,7 @@ app = FastAPI(
     version="1.6.42",
 )
 
+
 # modèle de données pour la requête d'entrée
 class Sentence(BaseModel):
     sentence: str
@@ -36,14 +34,15 @@ class Sentence(BaseModel):
         }
     }
 
+
 # endpoint de prédiction
 @app.post("/predict")
 def predict(features: Sentence):
     try:
         prediction = model.predict([features.sentence])
-        prediction_proba = model.predict_proba([features.sentence])
-        classes = ['anger', 'boredom', 'empty', 'enthusiasm', 'fun', 'happiness', 'hate', 'love',
-                   'neutral', 'relief', 'sadness', 'surprise', 'worry']
+        # prediction_proba = model.predict_proba([features.sentence])
+        # classes = ['anger', 'boredom', 'empty', 'enthusiasm', 'fun', 'happiness', 'hate', 'love',
+        #            'neutral', 'relief', 'sadness', 'surprise', 'worry']
 
         return {
             "prediction value": prediction[0],
